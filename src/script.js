@@ -8,7 +8,7 @@ window.onload = () => {
 async function writeInfo() {
     const ipInfoArea = document.getElementById('ipInfoArea');
     const infoList = {
-        'clientIP': 'clientIP',
+        'IP': 'clientIP',
         'ASN': 'ASN.autonomous_system_number',
         'IP Organization': 'ASN.autonomous_system_organization',
         'location': 'Location.country.names.en'

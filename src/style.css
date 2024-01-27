@@ -123,14 +123,20 @@ hr {
     justify-content: space-between;
 }
 
+#ipInfoArea .childPart>div {
+    max-width: 80%;
+    word-break: break-all;
+    user-select: none;
+}
+
 #ipInfoArea .childPart>div:first-child {
     text-transform: capitalize;
-    user-select: none;
+    white-space:nowrap;
+    margin-right: 1em;
 }
 
 #ipInfoArea .childPart>div:nth-child(2) {
     cursor: pointer;
-    user-select: none;
 }
 
 .bold {
