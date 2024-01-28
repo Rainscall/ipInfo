@@ -152,6 +152,13 @@ hr {
     cursor: pointer;
 }
 
+#ipInfoArea .childPart input {
+    outline: none;
+    border: none;
+    background: none;
+    text-align: right;
+}
+
 .bold {
     font-weight: 600;
 }

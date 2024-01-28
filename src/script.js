@@ -5,7 +5,7 @@ window.onload = () => {
     writeInfo();
 }
 
-async function writeInfo() {
+async function writeInfo(IPInfo) {
     const ipInfoArea = document.getElementById('ipInfoArea');
     const infoList = {
         'IP': 'clientIP',
@@ -13,7 +13,7 @@ async function writeInfo() {
         'IP Organization': 'ASN.autonomous_system_organization',
         'location': 'Location.country.names.en'
     }
-    const fakeInfoList = ['IP', 'ASN', 'IP Organization', 'location', 'raw data']
+    const fakeInfoList = ['IP', 'ASN', 'IP Organization', 'location', 'raw data', 'search']
     for (let i = 0; i < fakeInfoList.length; i++) {
         const currentKey = fakeInfoList[i];
         let base = document.createElement('div');
@@ -34,7 +34,9 @@ async function writeInfo() {
             ipInfoArea.appendChild(document.createElement('hr'));
         }
     }
-    const IPInfo = await fetch(apiEndpoint).then(r => r.json());
+    if (!IPInfo) {
+        IPInfo = await fetch(apiEndpoint).then(r => r.json());
+    }
     ipInfoArea.innerHTML = '';
 
     for (let i = 0; i < Object.keys(infoList).length; i++) {
@@ -51,7 +53,15 @@ async function writeInfo() {
         const ptr = infoList[currentKey].split('.');
         let ptrCache = IPInfo;
         for (let i = 0; i < ptr.length; i++) {
-            ptrCache = ptrCache[ptr[i]];
+            if (ptrCache[ptr[i]]) {
+                ptrCache = ptrCache[ptr[i]];
+            } else {
+                continue;
+            }
+        }
+
+        if (typeof ptrCache == 'object') {
+            continue;
         }
 
         value.innerText = ptrCache;
@@ -99,5 +109,43 @@ async function writeInfo() {
         base.appendChild(title);
         base.appendChild(value);
         ipInfoArea.appendChild(base);
-    })()
+        ipInfoArea.appendChild(document.createElement('hr'));
+    })();
+
+    (() => {
+        let base = document.createElement('div');
+        let title = document.createElement('div');
+        let value = document.createElement('div');
+        let form = document.createElement('form');
+        let input = document.createElement('input');
+        base.classList.add('childPart');
+        base.style.cursor = 'text';
+        title.classList.add('bold');
+        title.innerText = 'search';
+
+        input.placeholder = 'IPv4/IPv6';
+
+        base.addEventListener('click', () => {
+            input.focus();
+        });
+
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            if (!input.value) {
+                return;
+            }
+            getIPInfo(input.value);
+        }
+
+        form.appendChild(input);
+        value.appendChild(form);
+        base.appendChild(title);
+        base.appendChild(value);
+        ipInfoArea.appendChild(base);
+    })();
+}
+
+async function getIPInfo(ip = '1.1.1.1') {
+    const r = await fetch(`${apiEndpoint}/search/${ip}`).then(r => r.json());
+    writeInfo(r);
 }
