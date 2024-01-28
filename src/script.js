@@ -134,6 +134,25 @@ async function writeInfo(IPInfo) {
             if (!input.value) {
                 return;
             }
+            if (!isValidIP(input.value)) {
+                Toastify({
+                    text: 'Invalid IP',
+                    duration: 4300,
+                    className: "info",
+                    position: "center",
+                    gravity: "top",
+                    style: {
+                        color: "#FFF",
+                        background: "#414141",
+                        borderRadius: "8px",
+                        wordWrap: "break-word",
+                        width: "fit-content",
+                        maxWidth: "80vw",
+                        boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
+                    }
+                }).showToast();
+                return;
+            }
             getIPInfo(input.value);
         }
 
@@ -148,4 +167,16 @@ async function writeInfo(IPInfo) {
 async function getIPInfo(ip = '1.1.1.1') {
     const r = await fetch(`${apiEndpoint}/search/${ip}`).then(r => r.json());
     writeInfo(r);
+}
+
+function isValidIP(ip) {
+    function isValidIPv4(ip) {
+        const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        return ipv4Regex.test(ip);
+    }
+    function isValidIPv6(ip) {
+        const ipv6Regex = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
+        return ipv6Regex.test(ip);
+    }
+    return isValidIPv4(ip) || isValidIPv6(ip);
 }
