@@ -127,6 +127,13 @@ hr {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: 10px;
+    transition: all 0.374s;
+    cursor: pointer;
+}
+
+#ipInfoArea .childPart:hover {
+    background-color: rgba(241, 241, 241, 0.674);
 }
 
 #ipInfoArea .childPart>div {
@@ -158,6 +165,11 @@ hr {
     color: #840D23;
 }
 
+.inlineSvgIcon {
+    width: 1em;
+    height: 1em;
+}
+
 @media (prefers-color-scheme: dark) {
     .shadowBorder {
         box-shadow: 0 0px 45px -3px #fcfcfc1d;
@@ -173,5 +185,13 @@ hr {
 
     .copyright a {
         color: #cb3c56;
+    }
+
+    #ipInfoArea .childPart:hover {
+        background-color: rgba(10, 10, 10, 0.674);
+    }
+
+    .inlineSvgIcon svg path {
+        fill: #fff;
     }
 }
