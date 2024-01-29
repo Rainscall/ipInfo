@@ -123,7 +123,7 @@ async function writeInfo(IPInfo) {
         title.classList.add('bold');
         title.innerText = 'search';
 
-        input.placeholder = 'IPv4/IPv6';
+        input.placeholder = 'IPv4/IPv6/FQDN';
 
         base.addEventListener('click', () => {
             input.focus();
@@ -134,26 +134,19 @@ async function writeInfo(IPInfo) {
             if (!input.value) {
                 return;
             }
-            if (!isValidIP(input.value)) {
-                Toastify({
-                    text: 'Invalid IP',
-                    duration: 4300,
-                    className: "info",
-                    position: "center",
-                    gravity: "top",
-                    style: {
-                        color: "#FFF",
-                        background: "#414141",
-                        borderRadius: "8px",
-                        wordWrap: "break-word",
-                        width: "fit-content",
-                        maxWidth: "80vw",
-                        boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
-                    }
-                }).showToast();
+            if (!isValidIP(input.value) && !isValidDomain(input.value)) {
+                createToast('Invalid IP');
                 return;
             }
-            getIPInfo(input.value);
+            createToast('Loading...', -1, '#FFF', '#414141', 'temp-search-loadingToast');
+
+            getIPInfo(input.value)
+                .then(r => {
+                    if (r == 'NXDOMAIN') {
+                        createToast('No A/AAAA record found for this domain.', 4300, '#FFF', '#840D23');
+                        input.value = '';
+                    }
+                })
         }
 
         form.appendChild(input);
@@ -166,7 +159,20 @@ async function writeInfo(IPInfo) {
 
 async function getIPInfo(ip = '1.1.1.1') {
     const r = await fetch(`${apiEndpoint}/search/${ip}`).then(r => r.json());
+    removeElementsByClassName('temp-search-loadingToast', 500);
+    if (r.status === 'NXDOMAIN') {
+        return 'NXDOMAIN';
+    }
     writeInfo(r);
+}
+
+async function removeElementsByClassName(className, delay = 0) {
+    setTimeout(() => {
+        let ele = document.getElementsByClassName(className);
+        for (let i = 0; i < ele.length; i++) {
+            ele[i].parentNode.removeChild(ele[i]);
+        }
+    }, delay);
 }
 
 function isValidIP(ip) {
@@ -179,4 +185,31 @@ function isValidIP(ip) {
         return ipv6Regex.test(ip);
     }
     return isValidIPv4(ip) || isValidIPv6(ip);
+}
+
+function isValidDomain(str) {
+    const domainRegex = /^[a-zA-Z0-9]+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    return domainRegex.test(str);
+}
+
+function createToast(info, time = 4300, color = '#FFF', bgColor = '#414141', exClassName) {
+    if (!info) {
+        return;
+    }
+    Toastify({
+        text: info,
+        duration: time,
+        className: `info ${exClassName}`,
+        position: "center",
+        gravity: "top",
+        style: {
+            color: color,
+            background: bgColor,
+            borderRadius: "8px",
+            wordWrap: "break-word",
+            width: "fit-content",
+            maxWidth: "80vw",
+            boxShadow: "0 3px 6px -1px rgba(0, 0, 0, 0.217), 0 10px 36px -4px rgba(98, 98, 98, 0.171)"
+        }
+    }).showToast();
 }
