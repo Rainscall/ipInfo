@@ -3,6 +3,30 @@ const apiEndpoint = 'https://ip-backend.typeboom.com';
 let userIP = '';
 let isNativeIP = 'Unknown';
 
+(() => {
+    const fakeInfoList = ['IP', 'ASN', 'IP Organization', 'location', 'native IP', 'raw data', 'search']
+    for (let i = 0; i < fakeInfoList.length; i++) {
+        const currentKey = fakeInfoList[i];
+        let base = document.createElement('div');
+        let title = document.createElement('div');
+        let value = document.createElement('div');
+
+        base.classList.add('childPart');
+
+        title.innerText = currentKey;
+        title.classList.add('bold');
+
+        value.innerText = 'Loading';
+
+        base.appendChild(title);
+        base.appendChild(value);
+        ipInfoArea.appendChild(base);
+        if (i < fakeInfoList.length - 1) {
+            ipInfoArea.appendChild(document.createElement('hr'));
+        }
+    }
+})();
+
 window.onload = () => {
     writeInfo();
 }
@@ -32,28 +56,6 @@ async function writeInfo(IPInfo) {
         }
     } catch {
         isNativeIP = 'Unknown';
-    }
-
-    const fakeInfoList = ['IP', 'ASN', 'IP Organization', 'location', 'naive IP', 'raw data', 'search']
-    for (let i = 0; i < fakeInfoList.length; i++) {
-        const currentKey = fakeInfoList[i];
-        let base = document.createElement('div');
-        let title = document.createElement('div');
-        let value = document.createElement('div');
-
-        base.classList.add('childPart');
-
-        title.innerText = currentKey;
-        title.classList.add('bold');
-
-        value.innerText = 'Loading';
-
-        base.appendChild(title);
-        base.appendChild(value);
-        ipInfoArea.appendChild(base);
-        if (i < fakeInfoList.length - 1) {
-            ipInfoArea.appendChild(document.createElement('hr'));
-        }
     }
 
     ipInfoArea.innerHTML = '';
