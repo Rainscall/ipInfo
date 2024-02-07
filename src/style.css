@@ -132,6 +132,21 @@ hr {
     cursor: pointer;
 }
 
+#ipInfoArea .childPart div:nth-child(2):has(input) {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.childPart form:has(input) {
+    width: 100%;
+}
+
+.childPart form input {
+    width: 100%;
+}
+
 #ipInfoArea .childPart:has(input:valid),
 #ipInfoArea .childPart:hover {
     background-color: rgba(241, 241, 241, 0.674);
