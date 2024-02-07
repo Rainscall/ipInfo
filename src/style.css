@@ -132,6 +132,7 @@ hr {
     cursor: pointer;
 }
 
+#ipInfoArea .childPart:has(input:valid),
 #ipInfoArea .childPart:hover {
     background-color: rgba(241, 241, 241, 0.674);
 }
