@@ -178,9 +178,10 @@ async function writeInfo(IPInfo) {
             if (!input.value) {
                 return;
             }
-            if (!isValidIP(input.value) && !isValidDomain(input.value)) {
-                if ((input.value.startsWith('http://') || input.value.startsWith('https://')) && input.value.includes('.')) {
-                    input.value = input.value.split('/')[2].split(':')[0];
+            let addr = input.value.trim();
+            if (!isValidIP(addr) && !isValidDomain(addr)) {
+                if ((addr.startsWith('http://') || addr.startsWith('https://')) && addr.includes('.')) {
+                    addr = addr.split('/')[2].split(':')[0];
                 } else {
                     createToast('Invalid IP');
                     return;
@@ -188,7 +189,7 @@ async function writeInfo(IPInfo) {
             }
             createToast('Loading...', -1, '#FFF', '#414141', 'temp-search-loadingToast');
 
-            getIPInfo(input.value)
+            getIPInfo(addr)
                 .then(r => {
                     if (r == 'NXDOMAIN') {
                         createToast('No A/AAAA record found for this domain.', 4300, '#FFF', '#840D23');
