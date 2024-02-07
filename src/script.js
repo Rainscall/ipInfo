@@ -90,6 +90,7 @@ async function writeInfo(IPInfo) {
                 base.addEventListener('click', () => {
                     window.open(`https://www.peeringdb.com/search/v2?q=AS${value.dataset.value}`)
                 });
+                break;
             }
             default: {
                 base.addEventListener('click', () => {
