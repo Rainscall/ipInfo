@@ -85,26 +85,34 @@ async function writeInfo(IPInfo) {
 
         value.innerText = ptrCache;
         value.dataset.value = ptrCache;
-        base.addEventListener('click', () => {
-            value.innerText = 'Copied';
-            const textArea = document.createElement('textArea')
-            textArea.value = value.dataset.value;
-            textArea.style.width = 0
-            textArea.style.position = 'fixed'
-            textArea.style.left = '-999px'
-            textArea.style.top = '10px'
-            textArea.setAttribute('readonly', 'readonly')
-            document.body.appendChild(textArea)
+        switch (currentKey) {
+            case 'ASN': {
+                base.addEventListener('click', () => {
+                    window.open(`https://www.peeringdb.com/search/v2?q=AS${value.dataset.value}`)
+                });
+            }
+            default: {
+                base.addEventListener('click', () => {
+                    value.innerText = 'Copied';
+                    const textArea = document.createElement('textArea')
+                    textArea.value = value.dataset.value;
+                    textArea.style.width = 0
+                    textArea.style.position = 'fixed'
+                    textArea.style.left = '-999px'
+                    textArea.style.top = '10px'
+                    textArea.setAttribute('readonly', 'readonly')
+                    document.body.appendChild(textArea)
 
-            textArea.select()
-            document.execCommand('copy')
-            document.body.removeChild(textArea)
-            let Interval = setInterval(() => {
-                value.innerText = value.dataset.value;
-                console.log('123');
-                clearInterval(Interval);
-            }, 350)
-        })
+                    textArea.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(textArea)
+                    let Interval = setInterval(() => {
+                        value.innerText = value.dataset.value;
+                        clearInterval(Interval);
+                    }, 350)
+                })
+            }
+        }
 
         base.appendChild(title);
         base.appendChild(value);
