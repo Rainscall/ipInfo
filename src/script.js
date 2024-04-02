@@ -4,7 +4,7 @@ let userIP = '';
 let isNativeIP = 'Unknown';
 
 (() => {
-    const fakeInfoList = ['IP', 'ASN', 'IP Organization', 'location', 'native IP', 'raw data', 'search']
+    const fakeInfoList = ['IP', 'ASN', 'Organization', 'country', 'city', 'native IP', 'raw data', 'search']
     for (let i = 0; i < fakeInfoList.length; i++) {
         const currentKey = fakeInfoList[i];
         let base = document.createElement('div');
@@ -36,8 +36,9 @@ async function writeInfo(IPInfo) {
     const infoList = {
         'IP': 'clientIP',
         'ASN': 'ASN.autonomous_system_number',
-        'IP Organization': 'ASN.autonomous_system_organization',
-        'location': 'Location.country.names.en'
+        'Organization': 'ASN.autonomous_system_organization',
+        'country': 'Location.country.names.en',
+        'city': 'Location.city.names.en'
     }
 
     if (!IPInfo) {
